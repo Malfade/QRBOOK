@@ -5,10 +5,10 @@ from pathlib import Path
 
 class Config:
     BASE_DIR = Path(__file__).resolve().parent.parent
-    DEFAULT_SQLITE_URI = "sqlite:///" + str(BASE_DIR / "instance" / "dev.db")
+    DEFAULT_DATABASE_URI = "postgresql+psycopg://qrbooks:qrbooks@localhost:5432/qrbooks_dev"
 
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", DEFAULT_SQLITE_URI)
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", DEFAULT_DATABASE_URI)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "jwt-dev-secret")
     JWT_TOKEN_LOCATION = ["cookies"]

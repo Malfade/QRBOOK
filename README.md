@@ -44,7 +44,7 @@ QRBOOKS — полнофункциональная система брониро
 |-----------|-------------------------|
 | Backend   | Python 3.12, Flask, SQLAlchemy 2.x, Alembic, Flask-JWT-Extended, Flask-Limiter |
 | Frontend  | React 18, TypeScript, Vite, CSS-модули (см. `src/styles/global.css`) |
-| База данных | PostgreSQL 15 (боевое окружение), SQLite (локальная разработка по умолчанию) |
+| База данных | PostgreSQL 15 (локальная и боевая среды) |
 | Утилиты   | npm scripts, seed-скрипт, QR генератор (qrcode) |
 
 **Сервисный слой** в `backend/app/services/` инкапсулирует бизнес-логику: проверка пересечений, почасовые ограничения, массовые операции.
@@ -58,14 +58,22 @@ cd backend
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+# если пакет psycopg не собирается, установите системные зависимости из README PostgreSQL или используйте `pip install psycopg[binary]`
 cp .env.example .env
 ```
 
-> ⚠️ Переменная `SQLALCHEMY_DATABASE_URI` в `.env` может указывать на PostgreSQL. Если соединение недоступно, приложение автоматически откатывается на файл SQLite `instance/dev.db` (логируется предупреждение).
+> ⚠️ Обязательно укажите `DATABASE_URL` в `.env` с подключением к PostgreSQL, например `postgresql+psycopg://qrbooks:qrbooks@localhost:5432/qrbooks_dev`. Приложение не стартует без доступной БД.
 
 ### База данных и миграции
 
-1. **Инициализация Alembic (однократно)**
+1. **Создайте базу данных PostgreSQL (однократно)**
+   ```bash
+   createdb qrbooks_dev
+   # или psql -c "CREATE DATABASE qrbooks_dev;"
+   ```
+   При необходимости добавьте пользователя и пароль, чтобы совпадали с `DATABASE_URL`.
+
+2. **Инициализация Alembic (однократно)**
    ```bash
    flask --app app db init
    ```
@@ -95,18 +103,18 @@ cp .env.example .env
        ${downgrades if downgrades else "pass"}
    ```
 
-2. **Применение миграций**
+3. **Применение миграций**
    ```bash
    flask --app app db upgrade
    ```
 
-3. **Создание новой миграции**
+4. **Создание новой миграции**
    ```bash
    flask --app app db migrate -m "short description"
    flask --app app db upgrade
    ```
 
-4. **Первичное заполнение** (создание ролей, учебных кабинетов, тестовых пользователей):
+5. **Первичное заполнение** (создание ролей, учебных кабинетов, тестовых пользователей):
    ```bash
    python seed.py
    ```
@@ -212,7 +220,7 @@ npm run lint
 | Проблема | Решение |
 |----------|---------|
 | `flask db migrate` жалуется на `migrations/script.py.mako` | Убедитесь, что файл шаблона существует (см. [База данных и миграции](#база-данных-и-миграции)). |
-| Предупреждение `Не удалось подключиться к БД ... appuser` | Проверьте `DATABASE_URL` в `.env`. При разработке можно игнорировать — приложение переключится на SQLite. |
+| Ошибка `Не удалось подключиться к БД ...` при старте | Проверьте `DATABASE_URL` в `.env` и убедитесь, что PostgreSQL запущен и принимает коннекты. |
 | `npm run dev` не видит backend | Проверьте `frontend/.env` — переменная `VITE_API_BASE_URL` должна указывать на `http://localhost:5000`. |
 | Бронь не создаётся, сообщение «Reservation starts before allowed time» | Проверьте базовое окно аудитории в админке (вкладка «Кабинеты» → «Настроить время»). |
 

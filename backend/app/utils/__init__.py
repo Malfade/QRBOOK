@@ -6,3 +6,5 @@ __all__ = ["generate_room_qr"]
 
 
 
+
+

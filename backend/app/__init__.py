@@ -6,7 +6,6 @@ from flask import Flask
 from flask_cors import CORS
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import OperationalError
-from pathlib import Path
 
 from .config import Config
 from .extensions import bcrypt, db, jwt, limiter, migrate
@@ -40,11 +39,13 @@ def create_app(config_class: type[Config] | None = None) -> Flask:
 
 
 def _ensure_database_connection(app: Flask) -> None:
-    """Пробуем подключиться к БД и откатываемся на SQLite, если доступ отсутствует."""
-    uri = app.config.get("SQLALCHEMY_DATABASE_URI", Config.DEFAULT_SQLITE_URI)
-    if uri.startswith("sqlite"):
-        _ensure_sqlite_file(uri)
-        return
+    """Проверяем подключение к БД и выдаём понятную ошибку, если его нет."""
+    uri = app.config.get("SQLALCHEMY_DATABASE_URI")
+    if not uri:
+        raise RuntimeError(
+            "Переменная SQLALCHEMY_DATABASE_URI не задана. "
+            "Укажите корректный DATABASE_URL (например, постгрес)."
+        )
 
     engine = None
     try:
@@ -52,29 +53,19 @@ def _ensure_database_connection(app: Flask) -> None:
         with engine.connect() as connection:
             connection.execute(text("SELECT 1"))
     except OperationalError as exc:
-        fallback = Config.DEFAULT_SQLITE_URI
-        app.logger.warning(
-            "Не удалось подключиться к БД %s (%s). Используем SQLite по умолчанию: %s",
-            uri,
-            exc.orig if hasattr(exc, "orig") else exc,
-            fallback,
-        )
-        app.config["SQLALCHEMY_DATABASE_URI"] = fallback
-        _ensure_sqlite_file(fallback)
+        root_cause = exc.orig if hasattr(exc, "orig") else exc
+        message = (
+            "Не удалось подключиться к базе данных по адресу %s (%s). "
+            "Проверьте, что PostgreSQL запущен и параметры DATABASE_URL корректны."
+        ) % (uri, root_cause)
+        app.logger.error(message)
+        raise RuntimeError(message) from exc
     finally:
         if engine is not None:
             try:
                 engine.dispose()
             except Exception:  # noqa: BLE001
                 pass
-
-
-def _ensure_sqlite_file(uri: str) -> None:
-    if not uri.startswith("sqlite:///"):
-        return
-    db_path = uri.split("sqlite:///")[-1]
-    path = Path(db_path) if db_path.startswith("/") else Config.BASE_DIR / db_path
-    path.parent.mkdir(parents=True, exist_ok=True)
 
 
 def register_extensions(app: Flask) -> None:

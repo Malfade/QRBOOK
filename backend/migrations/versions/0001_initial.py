@@ -17,7 +17,12 @@ depends_on = None
 
 def upgrade() -> None:
     room_type_enum = sa.Enum('public', 'admin', 'service', name='roomtype')
-    reservation_status_enum = sa.Enum('active', 'finished', 'cancelled', name='reservationstatus')
+    reservation_status_enum = sa.Enum(
+        'active',
+        'finished',
+        'cancelled',
+        name='reservationstatus',
+    )
     user_role_enum = sa.Enum('student', 'teacher', 'admin', name='userrole')
     audit_action_enum = sa.Enum(
         'create_reservation',
@@ -29,11 +34,6 @@ def upgrade() -> None:
         'logout',
         name='auditaction',
     )
-
-    room_type_enum.create(op.get_bind(), checkfirst=True)
-    reservation_status_enum.create(op.get_bind(), checkfirst=True)
-    user_role_enum.create(op.get_bind(), checkfirst=True)
-    audit_action_enum.create(op.get_bind(), checkfirst=True)
 
     op.create_table(
         'users',
