@@ -30,6 +30,7 @@ class Config:
     CORS_ORIGINS = [origin.strip() for origin in os.getenv(
         "CORS_ORIGINS",
         "http://localhost:5173,http://localhost:5174",
+        "https://qrbook-front.vercel.app/"
     ).split(",") if origin.strip()]
     CORS_HEADERS = [
         header.strip()
