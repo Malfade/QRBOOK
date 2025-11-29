@@ -13,7 +13,7 @@ export async function createAuditLog(
   actorId: number | null,
   action: AuditAction,
   description?: string,
-  payload?: any
+  payload?: Record<string, unknown>
 ) {
   return prisma.auditLog.create({
     data: {

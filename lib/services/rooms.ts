@@ -39,7 +39,7 @@ export async function createRoom(data: {
 
   // Generate QR code
   try {
-    const qrCodeUrl = await generateQRCode(room.id, room.name)
+    const qrCodeUrl = await generateQRCode(room.id)
     await prisma.room.update({
       where: { id: room.id },
       data: { qrCodeUrl },
@@ -104,7 +104,7 @@ export async function regenerateQRCode(roomId: number) {
     throw new Error('Room not found')
   }
 
-  const qrCodeUrl = await generateQRCode(roomId, room.name)
+  const qrCodeUrl = await generateQRCode(roomId)
   
   return prisma.room.update({
     where: { id: roomId },

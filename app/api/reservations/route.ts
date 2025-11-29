@@ -65,10 +65,11 @@ export async function POST(request: NextRequest) {
     )
 
     return NextResponse.json({ reservation }, { status: 201 })
-  } catch (error: any) {
+  } catch (error) {
     console.error('Create reservation error:', error)
+    const message = error instanceof Error ? error.message : 'Ошибка создания брони'
     return NextResponse.json(
-      { error: error.message || 'Ошибка создания брони' },
+      { error: message },
       { status: 400 }
     )
   }

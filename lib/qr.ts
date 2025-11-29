@@ -1,8 +1,8 @@
 import QRCode from 'qrcode'
-import { writeFile, mkdir } from 'fs/promises'
+import { mkdir } from 'fs/promises'
 import { join } from 'path'
 
-export async function generateQRCode(roomId: number, roomName: string): Promise<string> {
+export async function generateQRCode(roomId: number): Promise<string> {
   const url = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/rooms/${roomId}`
   const qrPath = join(process.cwd(), 'public', 'qr', `${roomId}.png`)
   

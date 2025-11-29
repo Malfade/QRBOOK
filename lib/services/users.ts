@@ -63,7 +63,11 @@ export async function updateUser(
     password?: string
   }
 ) {
-  const updateData: any = {}
+  const updateData: {
+    name?: string
+    role?: 'student' | 'teacher' | 'admin'
+    hashedPassword?: string
+  } = {}
   
   if (data.name) updateData.name = data.name
   if (data.role) updateData.role = data.role

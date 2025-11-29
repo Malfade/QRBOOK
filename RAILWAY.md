@@ -24,12 +24,12 @@
 DATABASE_URL=${{Postgres.DATABASE_URL}}
 
 # JWT Secret (сгенерируйте случайную строку)
-JWT_SECRET=<random-32-chars>
+JWT_SECRET=jgf64kciufkgmvbndls7ujiokp0fbnhby6
 # Генерация: node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 
 # App URLs (замените после первого деплоя на реальный URL)
-NEXT_PUBLIC_APP_URL=https://your-app.railway.app
-NEXT_PUBLIC_QR_BASE_URL=https://your-app.railway.app/qr
+NEXT_PUBLIC_APP_URL=https://qrbook-production.up.railway.app
+NEXT_PUBLIC_QR_BASE_URL=https://qrbook-production.up.railway.app/qr
 
 # Node Environment
 NODE_ENV=production
