@@ -1,0 +1,102 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  student
+  teacher
+  admin
+}
+
+enum RoomType {
+  public
+  admin
+  service
+}
+
+enum ReservationStatus {
+  active
+  finished
+  cancelled
+}
+
+enum AuditAction {
+  create_reservation
+  cancel_reservation
+  update_reservation
+  update_room
+  create_user
+  login
+  logout
+}
+
+model User {
+  id              Int      @id @default(autoincrement())
+  name            String
+  role            UserRole
+  hashedPassword  String   @map("hashed_password")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  reservations    Reservation[]
+  auditLogs       AuditLog[]
+
+  @@map("users")
+}
+
+model Room {
+  id            Int       @id @default(autoincrement())
+  name          String    @unique
+  type          RoomType
+  qrCodeUrl     String?   @map("qr_code_url")
+  isBlocked     Boolean   @default(false) @map("is_blocked")
+  bookingStart  String?   @map("booking_start") // Time as string "HH:MM"
+  bookingEnd    String?   @map("booking_end")   // Time as string "HH:MM"
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  reservations  Reservation[]
+
+  @@map("rooms")
+}
+
+model Reservation {
+  id        Int               @id @default(autoincrement())
+  roomId    Int               @map("room_id")
+  userId    Int               @map("user_id")
+  startTime DateTime          @map("start_time")
+  endTime   DateTime          @map("end_time")
+  status    ReservationStatus @default(active)
+  createdAt DateTime          @default(now()) @map("created_at")
+  updatedAt DateTime          @updatedAt @map("updated_at")
+
+  room      Room              @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([roomId, startTime, endTime], name: "uq_room_time")
+  @@index([startTime])
+  @@index([endTime])
+  @@map("reservations")
+}
+
+model AuditLog {
+  id          Int          @id @default(autoincrement())
+  actorId     Int?         @map("actor_id")
+  action      AuditAction
+  description String?
+  payload     Json?
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+
+  actor       User?        @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@map("audit_logs")
+}
+

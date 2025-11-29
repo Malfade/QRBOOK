@@ -1,0 +1,418 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap');
+
+:root {
+  color-scheme: light dark;
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --bg: #0f172a;
+  --bg-muted: #111c34;
+  --surface: rgba(15, 23, 42, 0.88);
+  --surface-elevated: rgba(30, 41, 59, 0.92);
+  --surface-soft: rgba(148, 163, 184, 0.16);
+  --text: #e2e8f0;
+  --text-muted: #94a3b8;
+  --accent: #38bdf8;
+  --accent-soft: rgba(56, 189, 248, 0.18);
+  --accent-strong: #0ea5e9;
+  --success: #34d399;
+  --success-soft: rgba(52, 211, 153, 0.1);
+  --warning: #fbbf24;
+  --warning-soft: rgba(251, 191, 36, 0.14);
+  --danger: #f87171;
+  --danger-soft: rgba(248, 113, 113, 0.12);
+  --outline: rgba(148, 163, 184, 0.25);
+  --outline-strong: rgba(148, 163, 184, 0.45);
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+  --shadow-sm: 0 12px 32px rgba(8, 15, 30, 0.2);
+  --shadow-lg: 0 24px 54px rgba(15, 23, 42, 0.35);
+  --layout-width: min(1120px, 94vw);
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, rgba(56, 189, 248, 0.16), transparent 55%),
+    radial-gradient(circle at bottom, rgba(99, 102, 241, 0.12), transparent 50%),
+    linear-gradient(140deg, #020617 0%, #0f172a 50%, #020617 100%);
+  background-attachment: fixed;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  backdrop-filter: blur(22px);
+}
+
+.app-header {
+  width: var(--layout-width);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 24px 30px;
+  margin: 32px 0 24px;
+  background: linear-gradient(120deg, rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.7));
+  border: 1px solid var(--outline);
+  border-radius: calc(var(--radius-lg) - 4px);
+  box-shadow: var(--shadow-sm);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo-tagline {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.app-nav {
+  display: flex;
+  gap: 12px;
+  padding: 8px;
+  border-radius: 999px;
+  background-color: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(56, 189, 248, 0.16);
+}
+
+.nav-link {
+  padding: 8px 18px;
+  border-radius: 999px;
+  color: var(--text-muted);
+  transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--text);
+}
+
+.nav-link.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  box-shadow: 0 10px 25px rgba(56, 189, 248, 0.15);
+}
+
+.auth-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.auth-block > span:not(.user-chip) {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.12);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  letter-spacing: 0.02em;
+}
+
+.user-chip span:first-of-type {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.user-chip__role {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+}
+
+.btn,
+.btn-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 20px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text);
+  font-weight: 600;
+  transition: transform 0.2s ease, border 0.2s ease, background 0.25s ease, color 0.2s ease;
+  box-shadow: none;
+}
+
+.btn-link {
+  padding: 10px 12px;
+  color: var(--accent);
+}
+
+.btn:hover,
+.btn-link:hover {
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  background: linear-gradient(140deg, var(--accent), var(--accent-strong));
+  box-shadow: 0 16px 32px rgba(14, 165, 233, 0.25);
+}
+
+.btn-destructive {
+  border-color: rgba(248, 113, 113, 0.4);
+  color: var(--danger);
+  background: var(--danger-soft);
+}
+
+.btn-destructive:hover {
+  border-color: rgba(248, 113, 113, 0.6);
+  background: rgba(248, 113, 113, 0.22);
+}
+
+.btn-secondary {
+  background: rgba(99, 102, 241, 0.22);
+  border-color: rgba(99, 102, 241, 0.5);
+}
+
+.btn-tertiary {
+  border-color: rgba(148, 163, 184, 0.35);
+  color: var(--text-muted);
+}
+
+.btn-outline {
+  border-color: rgba(56, 189, 248, 0.45);
+  color: var(--accent);
+  background: rgba(56, 189, 248, 0.1);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: progress;
+  transform: none;
+}
+
+.app-main {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 0 0 60px;
+}
+
+.page {
+  width: var(--layout-width);
+  padding: 32px 36px 48px;
+  margin-bottom: 48px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--outline);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(18px);
+}
+
+.page h1 {
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+}
+
+.page h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.page section + section {
+  margin-top: 32px;
+}
+
+.page-subtitle {
+  margin: 0 0 24px;
+  color: var(--text-muted);
+  max-width: 640px;
+}
+
+.spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.spinner::before {
+  content: '';
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 3px solid rgba(56, 189, 248, 0.45);
+  border-top-color: transparent;
+  animation: spin 0.9s linear infinite;
+}
+
+.spinner-page {
+  display: grid;
+  place-items: center;
+  min-height: 200px;
+  font-size: 1.02rem;
+}
+
+.error-banner {
+  margin: 12px 0;
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  background: var(--danger-soft);
+  color: var(--danger);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+.form-error {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-size: 0.9rem;
+  border: 1px solid rgba(248, 113, 113, 0.35);
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: lowercase;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+}
+
+.status-pill.status-active {
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
+.status-pill.status-finished {
+  color: var(--text-muted);
+  background: rgba(148, 163, 184, 0.12);
+  border-color: rgba(148, 163, 184, 0.16);
+}
+
+.status-pill.status-cancelled {
+  color: var(--warning);
+  background: var(--warning-soft);
+  border-color: rgba(251, 191, 36, 0.35);
+}
+
+label {
+  display: grid;
+  gap: 10px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+input,
+select,
+textarea {
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background: rgba(15, 23, 42, 0.6);
+  box-shadow: inset 0 0 0 1px transparent;
+  transition: border 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: rgba(56, 189, 248, 0.5);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
+  background: rgba(15, 23, 42, 0.75);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 960px) {
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .auth-block {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .page {
+    padding: 28px 24px 40px;
+  }
+}
+
+@media (max-width: 720px) {
+  .app-header,
+  .page {
+    width: min(94vw, 480px);
+  }
+
+  .app-nav {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
