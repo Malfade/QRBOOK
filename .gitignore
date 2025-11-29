@@ -40,8 +40,9 @@ next-env.d.ts
 /prisma/migrations/
 node_modules
 
-# QR codes
+# QR codes (keep directory but ignore PNG files)
 /public/qr/*.png
+!/public/qr/.gitkeep
 
 # Old files
 /backend/
