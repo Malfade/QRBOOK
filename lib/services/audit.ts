@@ -1,4 +1,5 @@
 import { prisma } from '../prisma'
+import { Prisma } from '@prisma/client'
 
 export type AuditAction =
   | 'create_reservation'
@@ -13,14 +14,14 @@ export async function createAuditLog(
   actorId: number | null,
   action: AuditAction,
   description?: string,
-  payload?: Record<string, unknown>
+  payload?: Prisma.InputJsonValue
 ) {
   return prisma.auditLog.create({
     data: {
       actorId,
       action,
       description,
-      payload: payload || null,
+      ...(payload !== undefined && { payload }),
     },
   })
 }
